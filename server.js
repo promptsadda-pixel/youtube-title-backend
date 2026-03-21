@@ -10,30 +10,30 @@ app.use(express.json()); // IMPORTANT
 const PORT = process.env.PORT || 3000;
 
 // Test route
-app.get("/", (req, res) => {
-  res.send("Server is LIVE 🚀");
-});
-
-// 🔥 SAFE GENERATE ROUTE
 app.post("/generate", (req, res) => {
-  try {
 
-    const keyword = req.body?.keyword || "YouTube";
+  const keyword = req.body?.keyword || "YouTube";
 
-    const titles = [
-      `🔥 10 ${keyword} Hacks That Will Blow Your Mind`,
-      `How to Master ${keyword} in 2026 (Step-by-Step)`,
-      `7 Secrets About ${keyword} Nobody Tells You`,
-      `Why ${keyword} Is Not Working for You (Fix This!)`,
-      `Best ${keyword} Strategies That Actually Work`
-    ];
+  const powerWords = [
+    "Ultimate", "Proven", "Secret", "Insane", "Powerful",
+    "Shocking", "Amazing", "Best", "Simple", "Fast"
+  ];
 
-    res.json({ titles });
+  const numbers = ["5", "7", "10", "15", "21"];
 
-  } catch (error) {
-    console.error("ERROR:", error);
-    res.status(500).json({ error: "Server error" });
+  const titles = [];
+
+  for(let i=0;i<10;i++){
+    const num = numbers[Math.floor(Math.random()*numbers.length)];
+    const word = powerWords[Math.floor(Math.random()*powerWords.length)];
+
+    titles.push(`🔥 ${num} ${word} ${keyword} Hacks That Actually Work`);
+    titles.push(`How to Master ${keyword} in ${num} Easy Steps (${word} Guide)`);
+    titles.push(`${word} ${keyword} Secrets Nobody Tells You (${num} Tips)`);
   }
+
+  res.json({ titles: titles.slice(0, 12) });
+
 });
 
 // Start server
