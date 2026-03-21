@@ -24,6 +24,9 @@ app.post("/generate", (req, res) => {
   });
 });
 
+app.get("/health", (req, res) => {
+  res.send("OK");
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
