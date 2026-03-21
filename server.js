@@ -2,7 +2,7 @@ const express = require("express");
 
 const app = express();
 
-// ✅ Safe port fallback
+// ✅ FIX: fallback port
 const PORT = process.env.PORT || 3000;
 
 // Root route
@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
   res.send("Server is LIVE 🚀");
 });
 
-// Health route
+// Health check
 app.get("/health", (req, res) => {
   res.send("OK");
 });
