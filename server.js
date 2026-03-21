@@ -10,29 +10,42 @@ app.use(express.json()); // IMPORTANT
 const PORT = process.env.PORT || 3000;
 
 // Test route
-app.get("/", (req, res) => {
-  res.send("Server is LIVE 🚀");
-});
-
-// 🔥 SAFE GENERATE ROUTE
-app.post("/generate", (req, res) => {
+app.post("/generate", async (req, res) => {
   try {
 
     const keyword = req.body?.keyword || "YouTube";
 
-    const titles = [
-      `🔥 10 ${keyword} Hacks That Will Blow Your Mind`,
-      `How to Master ${keyword} in 2026 (Step-by-Step)`,
-      `7 Secrets About ${keyword} Nobody Tells You`,
-      `Why ${keyword} Is Not Working for You (Fix This!)`,
-      `Best ${keyword} Strategies That Actually Work`
-    ];
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "user",
+            content: `Generate 12 highly clickable YouTube titles about "${keyword}".
+            Use numbers, power words, and emotional triggers.
+            Make them viral and SEO optimized.
+            Return only titles in list format.`
+          }
+        ]
+      })
+    });
+
+    const data = await response.json();
+
+    const titles = data.choices[0].message.content
+      .split("\n")
+      .filter(t => t.trim().length > 10);
 
     res.json({ titles });
 
   } catch (error) {
-    console.error("ERROR:", error);
-    res.status(500).json({ error: "Server error" });
+    console.error(error);
+    res.status(500).json({ error: "AI error" });
   }
 });
 
