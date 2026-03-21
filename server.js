@@ -1,21 +1,31 @@
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
-// ✅ FIX: fallback port
+// ✅ FIX CORS
+app.use(cors());
+app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
-// Root route
 app.get("/", (req, res) => {
   res.send("Server is LIVE 🚀");
 });
 
-// Health check
-app.get("/health", (req, res) => {
-  res.send("OK");
+// ✅ IMPORTANT: POST route
+app.post("/generate", (req, res) => {
+  res.json({
+    titles: [
+      "🔥 10 YouTube Growth Hacks That Work",
+      "How to Grow on YouTube Fast (2026 Guide)",
+      "7 Secrets to Viral YouTube Videos",
+      "Why Your YouTube Channel Is Not Growing",
+      "Best YouTube Tips for Beginners"
+    ]
+  });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log("Running on port:", PORT);
 });
