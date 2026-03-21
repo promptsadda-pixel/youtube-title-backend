@@ -1,11 +1,12 @@
 import express from "express";
 import cors from "cors";
-import fetch from "node-fetch";
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
+// 🔥 IMPORTANT: Railway port fix
 const PORT = process.env.PORT || 3000;
 
 // Test route
@@ -13,44 +14,19 @@ app.get("/", (req, res) => {
   res.send("Server is running ✅");
 });
 
-// AI route
-app.post("/generate", async (req, res) => {
-
-  const { keyword } = req.body;
-
-  try {
-
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "user",
-            content: `Generate 10 viral YouTube titles about "${keyword}" with numbers and power words.`
-          }
-        ]
-      })
-    });
-
-    const data = await response.json();
-
-    const titles = data.choices[0].message.content
-      .split("\n")
-      .filter(t => t.trim().length > 10);
-
-    res.json({ titles });
-
-  } catch (error) {
-    res.status(500).json({ error: "Error generating titles" });
-  }
-
+// Simple test route (NO API yet)
+app.post("/generate", (req, res) => {
+  res.json({
+    titles: [
+      "🔥 10 YouTube Growth Hacks That Work",
+      "How to Grow on YouTube Fast (2026 Guide)",
+      "7 Secrets to Viral YouTube Videos",
+      "Why Your YouTube Channel Is Not Growing",
+      "Best YouTube Tips for Beginners"
+    ]
+  });
 });
 
-app.listen(PORT, () => {
-  console.log("Server running");
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
